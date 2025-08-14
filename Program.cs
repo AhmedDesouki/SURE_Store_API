@@ -22,7 +22,7 @@ namespace SURE_Store_API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            //Ahmed
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
