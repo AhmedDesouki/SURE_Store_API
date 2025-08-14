@@ -1,36 +1,39 @@
+using Microsoft.EntityFrameworkCore;
+using SURE_Store_API.Data;
+using SURE_Store_API.Services;
 
-namespace SURE_Store_API
+
+var builder = WebApplication.CreateBuilder(args);
+
+// 1) ??? ??? DbContext ?????? ???????? (SQL Server)
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 2) ????? ???? ?????? ?? ??? DI (???????? ???????)
+builder.Services.AddScoped<ICartService, CartService>();
+
+// ???? ????????? ????????
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// (???????) ?? ???? JWT Auth ?????? ???
+// builder.Services.AddAuthentication(...);
+// builder.Services.AddAuthorization();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-            //Ahmed
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+// (???????) ?? JWT
+// app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+app.Run();
