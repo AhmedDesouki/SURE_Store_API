@@ -10,10 +10,11 @@ namespace SURE_Store_API.Models  // Define namespace for all domain entities
         // Primary key for the order entity
         // Auto-generated unique identifier for each order in the database
         public int Id { get; set; }
-        
+
         // Foreign key reference to the user who placed this order
         // Links the order to the customer who made the purchase
         // This is the database foreign key column
+        [ForeignKey("UserId")]
         public string UserId { get; set; } = string.Empty;  // Initialize as empty string to avoid null reference exceptions
         
         // Navigation property to the user who placed this order

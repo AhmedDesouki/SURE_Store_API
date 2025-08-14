@@ -48,7 +48,7 @@ namespace SURE_Store_API.Models  // Define namespace for all domain entities
         // Links the product to its category for organization and filtering
         // This is the database foreign key column
         [ForeignKey("CategoryId")]
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
         
         // Navigation property to the category this product belongs to
         // Virtual keyword enables Entity Framework lazy loading (category loaded only when accessed)
