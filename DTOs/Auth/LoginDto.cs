@@ -1,14 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SURE_Store_API.DTOs.Auth
+﻿namespace SURE_Store_API.DTOs.Auth
 {
     public class LoginDto
     {
-        [Required]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
-        public string Email { get; set; } = string.Empty;
-
-        [Required]
-        public string Password { get; set; } = string.Empty;
     }
 }
