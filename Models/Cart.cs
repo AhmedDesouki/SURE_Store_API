@@ -1,18 +1,33 @@
-using SURE_Store_API.Models;
 
-namespace SURE_Store_API.Models
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+
+namespace SURE_Store_API.Models  
 {
+ 
     public class Cart
     {
-        public int Id { get; set; } // ????? ????? (Primary Key)
+       
+        public int Id { get; set; }
+        
+        
+        [Required]  // Validation: field is mandatory
+        [ForeignKey("UserId")]
+        public string UserId { get; set; } = string.Empty;
+        
+     
+        public virtual ApplicationUser User { get; set; } = null!;
+        
+       
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        
+        
+        public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
+        
 
-        // Foreign Key ???????? ???? ?????
-        public int UserId { get; set; }
-
-        // Navigation Property ????????
-        public User User { get; set; }
-
-        // Navigation Property ?????? ?????
-        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+        
+        
+        public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
 }
