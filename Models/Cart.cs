@@ -1,8 +1,9 @@
 // Import data validation attributes for property validation
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 // Namespace for all application models
-namespace CursorProject.Entities
+namespace SURE_Store_API.Models  // Define namespace for all domain entities
 {
     /// <summary>
     /// Represents a shopping cart for a user in the e-commerce system
@@ -21,6 +22,7 @@ namespace CursorProject.Entities
         /// Links the cart to the customer who is shopping
         /// </summary>
         [Required]  // Validation: field is mandatory
+        [ForeignKey("UserId")]
         public string UserId { get; set; } = string.Empty;
         
         /// <summary>

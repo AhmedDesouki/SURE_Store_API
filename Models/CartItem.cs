@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 // Namespace for all application models
-namespace CursorProject.Entities
+namespace SURE_Store_API.Models
 {
     /// <summary>
     /// Represents an individual item within a shopping cart

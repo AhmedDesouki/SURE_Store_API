@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;  // Import data validation attributes for property validation
 using System.ComponentModel.DataAnnotations.Schema;  // Import database schema attributes
 
-namespace CursorProject.Entities  // Define namespace for all domain entities
+namespace SURE_Store_API.Models  // Define namespace for all domain entities
 {
     // Order entity that represents a customer order in the e-commerce system
     // This class tracks the complete order lifecycle from creation to delivery

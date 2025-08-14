@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;  // Import data validation attributes for property validation
 
-namespace CursorProject.Entities  // Define namespace for all domain entities
+namespace SURE_Store_API.Models  // Define namespace for all domain entities
 {
     // Category entity that represents a product category in the e-commerce system
     // This class organizes products into logical groups for better navigation and filtering

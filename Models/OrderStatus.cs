@@ -1,5 +1,5 @@
 // Namespace for all application models
-namespace CursorProject.Entities
+namespace SURE_Store_API.Models
 {
     /// <summary>
     /// Enumeration for order status values

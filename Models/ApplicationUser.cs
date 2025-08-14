@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;  // Import ASP.NET Core Identity framework for user management
 
-namespace CursorProject.Entities  // Define namespace for all domain entities
+namespace SURE_Store_API.Models  // Define namespace for all domain entities
 {
     // Custom user entity that extends ASP.NET Core Identity's base user class
     // This class represents a user in the e-commerce system with additional properties

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 
 // Namespace for all application models
-namespace CursorProject.Entities
+namespace SURE_Store_API.Models
 {
     /// <summary>
     /// Custom role model that extends ASP.NET Identity's IdentityRole

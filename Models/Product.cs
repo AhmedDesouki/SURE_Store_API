@@ -1,6 +1,7 @@
-using System.ComponentModel.DataAnnotations;  // Import data validation attributes for property validation
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;  // Import data validation attributes for property validation
 
-namespace CursorProject.Entities  // Define namespace for all domain entities
+namespace SURE_Store_API.Models  // Define namespace for all domain entities
 {
     // Product entity that represents a product in the e-commerce system
     // This class contains all essential information about products that customers can purchase
@@ -42,17 +43,18 @@ namespace CursorProject.Entities  // Define namespace for all domain entities
         [Required]  // Validation attribute: field is mandatory and cannot be null
         [Range(0, int.MaxValue, ErrorMessage = "Stock quantity must be 0 or greater")]  // Validation attribute: minimum value 0
         public int StockQuantity { get; set; }
-        
+
         // Foreign key reference to the category this product belongs to
         // Links the product to its category for organization and filtering
         // This is the database foreign key column
-        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public int? CategoryId { get; set; }
         
         // Navigation property to the category this product belongs to
         // Virtual keyword enables Entity Framework lazy loading (category loaded only when accessed)
         // Many-to-one relationship: many products can belong to one category
         // Null-forgiving operator (!) tells compiler this will not be null when accessed
-        public virtual Category Category { get; set; } = null!;
+        public virtual Category? Category { get; set; } = null!;
         
         // Collection of order items that contain this product
         // Virtual keyword enables Entity Framework lazy loading (order items loaded only when accessed)
