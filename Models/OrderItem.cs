@@ -10,10 +10,11 @@ namespace SURE_Store_API.Models  // Define namespace for all domain entities
         // Primary key for the order item entity
         // Auto-generated unique identifier for each order item in the database
         public int Id { get; set; }
-        
+
         // Foreign key reference to the order this item belongs to
         // Links the order item to its parent order
         // This is the database foreign key column
+        [ForeignKey("OrderId")]
         public int OrderId { get; set; }
         
         // Navigation property to the order this item belongs to
@@ -21,10 +22,11 @@ namespace SURE_Store_API.Models  // Define namespace for all domain entities
         // Many-to-one relationship: many order items can belong to one order
         // Null-forgiving operator (!) tells compiler this will not be null when accessed
         public virtual Order Order { get; set; } = null!;
-        
+
         // Foreign key reference to the product in this order item
         // Links the order item to the specific product being ordered
         // This is the database foreign key column
+        [ForeignKey("ProductId")]
         public int ProductId { get; set; }
         
         // Navigation property to the product in this order item

@@ -5,7 +5,7 @@ using SURE_Store_API.DTOs;  // Import main DTOs for responses and requests
 using SURE_Store_API.Models;  // Import domain entities
 using Microsoft.EntityFrameworkCore;  // Import Entity Framework Core for database operations
 
-namespace CursorProject.Services  // Define namespace for business logic services
+namespace SURE_Store_API.Services  // Define namespace for business logic services
 {
     // Interface defining the contract for product service operations
     // This interface allows for dependency injection and unit testing
@@ -71,7 +71,7 @@ namespace CursorProject.Services  // Define namespace for business logic service
                     Price = p.Price,  // Set product price
                     ImageUrl = p.ImageUrl,  // Set product image URL
                     StockQuantity = p.StockQuantity,  // Set stock quantity
-                    CategoryId = p.CategoryId,  // Set category ID
+                   CategoryId = p.CategoryId,  // Set category ID
                     CategoryName = p.Category.Name  // Set category name
                 })
                 .ToListAsync();  // Execute query and return list
