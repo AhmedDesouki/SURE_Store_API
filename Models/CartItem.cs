@@ -1,5 +1,6 @@
 // Import data validation attributes for property validation
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 // Namespace for all application models
 namespace SURE_Store_API.Models
@@ -21,6 +22,7 @@ namespace SURE_Store_API.Models
         /// Links the cart item to its parent cart
         /// </summary>
         [Required]  // Validation: field is mandatory
+        [ForeignKey("CartId")]
         public int CartId { get; set; }
         
         /// <summary>
@@ -35,6 +37,7 @@ namespace SURE_Store_API.Models
         /// Links the cart item to the specific product that was added to cart
         /// </summary>
         [Required]  // Validation: field is mandatory
+        [ForeignKey("ProductId")]
         public int ProductId { get; set; }
         
         /// <summary>

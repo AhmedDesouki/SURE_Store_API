@@ -2,7 +2,7 @@ using SURE_Store_API.Data;
 using SURE_Store_API.Interfaces;
 using SURE_Store_API.Services;
 
-namespace CursorProject.Repositories
+namespace SURE_Store_API.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
