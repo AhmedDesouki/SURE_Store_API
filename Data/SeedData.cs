@@ -1,7 +1,7 @@
 using SURE_Store_API.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace CursorProject.Data
+namespace SURE_Store_API.Data
 {
     public static class SeedData
     {

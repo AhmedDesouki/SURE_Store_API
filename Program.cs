@@ -1,11 +1,10 @@
-
-using CursorProject.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SURE_Store_API.Data;
+using SURE_Store_API.Helpers;
 using SURE_Store_API.Interfaces;
 using SURE_Store_API.Models;
 using SURE_Store_API.Repositories;
@@ -24,12 +23,18 @@ namespace SURE_Store_API
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Register repositories and services
-            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            //// Register repositories and services
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<SURE_Store_API.Services.IProductService, ProductService>();
+
             builder.Services.AddScoped<SURE_Store_API.Services.ICategoryService, CategoryService>();
+            builder.Services.AddScoped<SURE_Store_API.Services.IProductService, ProductService>();
+            // Register custom business logic services in the dependency injection container
+            builder.Services.AddScoped<JwtHelper>();  // JWT utility service for token generation and validation
+           
+           
+
 
             // Configure Swagger
             builder.Services.AddSwaggerGen(c =>
