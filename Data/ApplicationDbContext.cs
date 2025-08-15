@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SURE_Store_API.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string> //why these last two parameters?!!!!!!!!!!!!!!!
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) // Pass options to base DbContext constructor
