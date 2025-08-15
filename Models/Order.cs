@@ -7,11 +7,6 @@ namespace SURE_Store_API.Models {
     {
       
         public int Id { get; set; }
-        
-       
-      
-       
-       
         public virtual ApplicationUser User { get; set; } = null!;
         
       
