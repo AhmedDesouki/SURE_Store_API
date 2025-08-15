@@ -4,68 +4,50 @@ using SURE_Store_API.DTOs.Category;
 using SURE_Store_API.DTOs;
 using SURE_Store_API.Services;
 
+
 namespace SURE_Store_API.Controllers
 {
-    /// <summary>
-    /// Controller for handling category-related operations
-    /// Provides endpoints for managing product categories
-    /// </summary>
-    [ApiController]  // Indicates this is an API controller
-    [Route("api/[controller]")]  // Route template: api/categories
+
+    [ApiController]
+    [Route("api/[controller]")]
     public class CategoriesController : ControllerBase
     {
-        // Private field for dependency injection
-        /// <summary>
-        /// Category service for handling category operations
-        /// </summary>
+
         private readonly ICategoryService _categoryService;
 
-        /// <summary>
-        /// Constructor that accepts category service via dependency injection
-        /// </summary>
+
         /// <param name="categoryService">Category service for category operations</param>
         public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;  // Store category service reference
         }
 
-        /// <summary>
-        /// Gets all available categories
-        /// GET: api/categories
-        /// </summary>
-        /// <returns>List of all categories</returns>
-        [HttpGet]  // HTTP GET endpoint
+
+        [HttpGet]
         public async Task<ActionResult<List<CategoryDto>>> GetCategories()
         {
             var categories = await _categoryService.GetCategoriesAsync();
             return Ok(categories);
         }
 
-        /// <summary>
-        /// Gets a specific category by ID
-        /// GET: api/categories/{id}
-        /// </summary>
+
         /// <param name="id">Category ID</param>
-        /// <returns>Category details</returns>
-        [HttpGet("{id}")]  // HTTP GET endpoint with ID parameter
+
+        [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDto>> GetCategory(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
-                return NotFound();  // Return 404 if category not found
+                return NotFound();
             }
 
             return Ok(category);
         }
 
-        /// <summary>
-        /// Creates a new category
-        /// POST: api/categories
-        /// Requires admin authorization
-        /// </summary>
+
         /// <param name="request">Category creation request</param>
-        /// <returns>Created category details</returns>
+
         [HttpPost]  // HTTP POST endpoint
         [Authorize(Roles = "Admin")]  // Require admin role
         public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoryDto request)
@@ -74,16 +56,11 @@ namespace SURE_Store_API.Controllers
             return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, category);
         }
 
-        /// <summary>
-        /// Updates an existing category
-        /// PUT: api/categories/{id}
-        /// Requires admin authorization
-        /// </summary>
         /// <param name="id">Category ID</param>
         /// <param name="request">Category update request</param>
-        /// <returns>Updated category details</returns>
-        [HttpPut("{id}")]  // HTTP PUT endpoint with ID parameter
-        [Authorize(Roles = "Admin")]  // Require admin role
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CategoryDto>> UpdateCategory(int id, UpdateCategoryRequest request)
         {
             try
@@ -97,15 +74,11 @@ namespace SURE_Store_API.Controllers
             }
         }
 
-        /// <summary>
-        /// Deletes a category
-        /// DELETE: api/categories/{id}
-        /// Requires admin authorization
-        /// </summary>
+
         /// <param name="id">Category ID</param>
-        /// <returns>Success response</returns>
-        [HttpDelete("{id}")]  // HTTP DELETE endpoint with ID parameter
-        [Authorize(Roles = "Admin")]  // Require admin role
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteCategory(int id)
         {
             try
@@ -113,7 +86,7 @@ namespace SURE_Store_API.Controllers
                 var success = await _categoryService.DeleteCategoryAsync(id);
                 if (!success)
                 {
-                    return NotFound();  // Return 404 if category not found
+                    return NotFound();
                 }
 
                 return NoContent();  // Return 204 for successful deletion
