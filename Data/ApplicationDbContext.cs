@@ -10,9 +10,12 @@ namespace SURE_Store_API.Data
             : base(options) // Pass options to base DbContext constructor
         {
         }
+        public DbSet<Cart> Carts { get; set; } = null!;  // Null-forgiving operator tells compiler this will be initialized
 
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Order> Orders { get; set; } = null!;  // Null-forgiving operator tells compiler this will be initialized
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;  // Null-forgiving operator tells compiler this will be initialized
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
