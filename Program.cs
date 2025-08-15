@@ -51,7 +51,7 @@ namespace SURE_Store_API
                 options.User.RequireUniqueEmail = true;            // Each user must have a unique email address
             })
 .AddEntityFrameworkStores<ApplicationDbContext>()      // Use Entity Framework Core for storing user data
-.AddDefaultTokenProviders();
+.AddDefaultTokenProviders(); //k
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");  // Extract JWT configuration section from appsettings.json
             var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);     // Convert the secret key string to byte array for signing
