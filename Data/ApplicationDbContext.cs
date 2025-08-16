@@ -33,7 +33,7 @@ namespace SURE_Store_API.Data
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalAmount)
                 .HasPrecision(18, 2);
-
+            //F
             modelBuilder.Entity<OrderItem>()
                 .Property(o => o.Price)
                 .HasPrecision(18, 2);
