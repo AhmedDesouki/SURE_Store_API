@@ -6,7 +6,7 @@ using SURE_Store_API.Helpers;
 using SURE_Store_API.Models;
 using System.Security.Claims;  // Import security claims for JWT tokens
 
-namespace CursorProject.Services  // Define namespace for business logic services
+namespace SURE_Store_API.Services  // Define namespace for business logic services
 {
     // Interface defining the contract for authentication service operations
     // This interface allows for dependency injection and unit testing

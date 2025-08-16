@@ -12,8 +12,8 @@ using SURE_Store_API.Data;
 namespace SURE_Store_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250814202043_fasilDBIDN")]
-    partial class fasilDBIDN
+    [Migration("20250816155459_changeimgurls")]
+    partial class changeimgurls
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,7 +256,7 @@ namespace SURE_Store_API.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Cart");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("SURE_Store_API.Models.CartItem", b =>
@@ -286,7 +286,7 @@ namespace SURE_Store_API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("SURE_Store_API.Models.Category", b =>
@@ -453,7 +453,7 @@ namespace SURE_Store_API.Migrations
                             Id = 1,
                             CategoryId = 1,
                             Description = "Latest Apple smartphone",
-                            ImageUrl = "https://example.com/iphone15.jpg",
+                            ImageUrl = "https://images.unsplash.com/photo-1697284959152-32ef13855932?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                             Name = "iPhone 15",
                             Price = 999.99m,
                             StockQuantity = 50
@@ -463,7 +463,7 @@ namespace SURE_Store_API.Migrations
                             Id = 2,
                             CategoryId = 1,
                             Description = "Latest Samsung smartphone",
-                            ImageUrl = "https://example.com/galaxys23.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/51ngAkKqflL._AC_UY327_FMwebp_QL65_.jpg",
                             Name = "Samsung Galaxy S23",
                             Price = 899.99m,
                             StockQuantity = 30
@@ -473,7 +473,7 @@ namespace SURE_Store_API.Migrations
                             Id = 3,
                             CategoryId = 1,
                             Description = "Noise-cancelling headphones",
-                            ImageUrl = "https://example.com/sonyheadphones.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/51hrEIBMDzL._AC_SL1320_.jpg",
                             Name = "Sony WH-1000XM5",
                             Price = 349.99m,
                             StockQuantity = 100
@@ -483,7 +483,7 @@ namespace SURE_Store_API.Migrations
                             Id = 4,
                             CategoryId = 2,
                             Description = "Comfortable running shoes",
-                            ImageUrl = "https://example.com/nikeairmax.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/61gG+NEOhmL._AC_SX575_.jpg",
                             Name = "Nike Air Max",
                             Price = 129.99m,
                             StockQuantity = 200
@@ -493,7 +493,7 @@ namespace SURE_Store_API.Migrations
                             Id = 5,
                             CategoryId = 2,
                             Description = "High-performance running shoes",
-                            ImageUrl = "https://example.com/adidasultraboost.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/71Kks1RxWhL._AC_SY695_.jpg",
                             Name = "Adidas Ultraboost",
                             Price = 159.99m,
                             StockQuantity = 150
@@ -503,7 +503,7 @@ namespace SURE_Store_API.Migrations
                             Id = 6,
                             CategoryId = 2,
                             Description = "Classic denim jeans",
-                            ImageUrl = "https://example.com/levisjeans.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/51vL9b0iG5L._AC_SX679_.jpg",
                             Name = "Levi's Jeans",
                             Price = 59.99m,
                             StockQuantity = 300
@@ -513,7 +513,7 @@ namespace SURE_Store_API.Migrations
                             Id = 7,
                             CategoryId = 3,
                             Description = "Classic novel by F. Scott Fitzgerald",
-                            ImageUrl = "https://example.com/greatgatsby.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/61uYYec8joL._SL1500_.jpg",
                             Name = "The Great Gatsby",
                             Price = 10.99m,
                             StockQuantity = 500
@@ -523,7 +523,7 @@ namespace SURE_Store_API.Migrations
                             Id = 8,
                             CategoryId = 3,
                             Description = "Dystopian novel about totalitarianism",
-                            ImageUrl = "https://example.com/1984.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/71wANojhEKL._SL1500_.jpg",
                             Name = "1984 by George Orwell",
                             Price = 12.99m,
                             StockQuantity = 400
@@ -533,7 +533,7 @@ namespace SURE_Store_API.Migrations
                             Id = 9,
                             CategoryId = 3,
                             Description = "Classic novel by Harper Lee",
-                            ImageUrl = "https://example.com/tokillamockingbird.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/81aY1lxk+9L._SL1500_.jpg",
                             Name = "To Kill a Mockingbird",
                             Price = 14.99m,
                             StockQuantity = 350
@@ -543,90 +543,10 @@ namespace SURE_Store_API.Migrations
                             Id = 10,
                             CategoryId = 3,
                             Description = "Novel by J.D. Salinger",
-                            ImageUrl = "https://example.com/catcherintherye.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/81TRBjfC5fL._SL1500_.jpg",
                             Name = "The Catcher in the Rye",
                             Price = 11.99m,
                             StockQuantity = 450
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CategoryId = 1,
-                            Description = "Apple's high-performance laptop",
-                            ImageUrl = "https://example.com/macbookpro.jpg",
-                            Name = "MacBook Pro",
-                            Price = 1999.99m,
-                            StockQuantity = 20
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CategoryId = 1,
-                            Description = "Compact and powerful laptop",
-                            ImageUrl = "https://example.com/dellxps13.jpg",
-                            Name = "Dell XPS 13",
-                            Price = 1299.99m,
-                            StockQuantity = 25
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CategoryId = 1,
-                            Description = "Wireless noise-cancelling headphones",
-                            ImageUrl = "https://example.com/boseqc35.jpg",
-                            Name = "Bose QuietComfort 35 II",
-                            Price = 299.99m,
-                            StockQuantity = 80
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CategoryId = 1,
-                            Description = "Professional mirrorless camera",
-                            ImageUrl = "https://example.com/canoneosr5.jpg",
-                            Name = "Canon EOS R5",
-                            Price = 3899.99m,
-                            StockQuantity = 15
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CategoryId = 1,
-                            Description = "Full-frame mirrorless camera",
-                            ImageUrl = "https://example.com/sonya7iii.jpg",
-                            Name = "Sony A7 III",
-                            Price = 1999.99m,
-                            StockQuantity = 30
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CategoryId = 1,
-                            Description = "Advanced fitness tracker with GPS",
-                            ImageUrl = "https://example.com/fitbitcharge5.jpg",
-                            Name = "Fitbit Charge 5",
-                            Price = 149.99m,
-                            StockQuantity = 100
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CategoryId = 1,
-                            Description = "Premium Android tablet with S Pen support",
-                            ImageUrl = "https://example.com/galaxytabs8.jpg",
-                            Name = "Samsung Galaxy Tab S8",
-                            Price = 699.99m,
-                            StockQuantity = 40
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CategoryId = 1,
-                            Description = "Smartwatch with health tracking features",
-                            ImageUrl = "https://example.com/applewatchseries7.jpg",
-                            Name = "Apple Watch Series 7",
-                            Price = 399.99m,
-                            StockQuantity = 60
                         });
                 });
 

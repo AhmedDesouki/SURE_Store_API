@@ -30,6 +30,8 @@ namespace SURE_Store_API
 
             builder.Services.AddScoped<SURE_Store_API.Services.ICategoryService, CategoryService>();
             builder.Services.AddScoped<SURE_Store_API.Services.IProductService, ProductService>();
+            builder.Services.AddScoped<SURE_Store_API.Services.IAuthService, AuthService>();
+
             // Register custom business logic services in the dependency injection container
             builder.Services.AddScoped<JwtHelper>();  // JWT utility service for token generation and validation
            
@@ -148,7 +150,7 @@ namespace SURE_Store_API
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-
+            //app.UseStaticFiles(); 
             // Seed database
             using (var scope = app.Services.CreateScope())
             {
