@@ -124,10 +124,13 @@ namespace SURE_Store_API
             // Configure CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("https://yourfrontend.com")
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod());
+                options.AddPolicy("AllowAngularApp",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
             });
 
             var app = builder.Build();
@@ -140,7 +143,8 @@ namespace SURE_Store_API
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("AllowSpecificOrigin"); // Add CORS middleware
+            //app.UseCors("AllowSpecificOrigin"); // Add CORS middleware
+            app.UseCors("AllowAngularApp");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
