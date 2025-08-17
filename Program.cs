@@ -23,19 +23,24 @@ namespace SURE_Store_API
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            //// Register repositories and services
+            // Register repositories
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<ICartRepository, CartRepository>();
 
+            // Register services
             builder.Services.AddScoped<SURE_Store_API.Services.ICategoryService, CategoryService>();
             builder.Services.AddScoped<SURE_Store_API.Services.IProductService, ProductService>();
+            builder.Services.AddScoped<SURE_Store_API.Services.IOrderService, OrderService>();
+            builder.Services.AddScoped<SURE_Store_API.Services.ICartService, CartService>();
             builder.Services.AddScoped<SURE_Store_API.Services.IAuthService, AuthService>();
 
             // Register custom business logic services in the dependency injection container
             builder.Services.AddScoped<JwtHelper>();  // JWT utility service for token generation and validation
-           
-           
+
+
 
 
             // Configure Swagger
@@ -126,13 +131,10 @@ namespace SURE_Store_API
             // Configure CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAngularApp",
-                    policy =>
-                    {
-                        policy.WithOrigins("http://localhost:4200")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                    });
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("https://yourfrontend.com")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod());
             });
 
             var app = builder.Build();
@@ -145,12 +147,11 @@ namespace SURE_Store_API
             }
 
             app.UseHttpsRedirection();
-            //app.UseCors("AllowSpecificOrigin"); // Add CORS middleware
-            app.UseCors("AllowAngularApp");
+            app.UseCors("AllowSpecificOrigin"); // Add CORS middleware
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-            //app.UseStaticFiles(); 
+
             // Seed database
             using (var scope = app.Services.CreateScope())
             {
