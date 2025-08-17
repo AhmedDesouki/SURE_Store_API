@@ -28,7 +28,7 @@ namespace SURE_Store_API.Controllers
         [HttpGet]
         public async Task<ActionResult<ProductListResponse>> GetProducts(
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10,
+            [FromQuery] int pageSize = 20,
             [FromQuery] int? categoryId = null,
             [FromQuery] string? search = null)
         {
