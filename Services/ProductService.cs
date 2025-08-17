@@ -10,7 +10,7 @@ namespace SURE_Store_API.Services
     // Interface defining the contract for product service operations
     // This interface allows for dependency injection and unit testing
     public interface IProductService
-    {
+    { //
         Task<ProductListResponse> GetProductsAsync(int page = 1, int pageSize = 10, int? categoryId = null, string? search = null);
         Task<ProductDto?> GetProductByIdAsync(int id);
         Task<ProductDto> CreateProductAsync(CreateProductDto request);
