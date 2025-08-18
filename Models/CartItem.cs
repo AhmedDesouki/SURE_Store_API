@@ -1,50 +1,50 @@
-// Import data validation attributes for property validation
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-// Namespace for all application models
+
 namespace SURE_Store_API.Models
 {
-    /// <summary>
-    /// Represents an individual item within a shopping cart
-    /// Links a specific product with its quantity in the user's cart
-    /// </summary>
+    
+    // Represents an individual item within a shopping cart
+    // Links a specific product with its quantity in the user's cart
+    
     public class CartItem
     {
-        /// <summary>
-        /// Primary key for the cart item
-        /// Auto-generated unique identifier for each cart item
-        /// </summary>
+        
+        // Primary key for the cart item
+        // Auto-generated unique identifier for each cart item
+        
         public int Id { get; set; }
         
-        /// <summary>
-        /// Foreign key reference to the cart this item belongs to
-        /// Links the cart item to its parent cart
-        /// </summary>
+  
+        // Foreign key reference to the cart this item belongs to
+        // Links the cart item to its parent cart
+        
         [Required]  // Validation: field is mandatory
         [ForeignKey("CartId")]
         public int CartId { get; set; }
         
-        /// <summary>
-        /// Navigation property to the cart this item belongs to
-        /// Virtual property for Entity Framework lazy loading
-        /// Many-to-one relationship: many cart items can belong to one cart
-        /// </summary>
+       
+        // Navigation property to the cart this item belongs to
+        // Virtual property for Entity Framework lazy loading
+        // Many-to-one relationship: many cart items can belong to one cart
+       
         public virtual Cart Cart { get; set; } = null!;
         
-        /// <summary>
-        /// Foreign key reference to the product in this cart item
-        /// Links the cart item to the specific product that was added to cart
-        /// </summary>
+        
+        // Foreign key reference to the product in this cart item
+        // Links the cart item to the specific product that was added to cart
+    
         [Required]  // Validation: field is mandatory
         [ForeignKey("ProductId")]
         public int ProductId { get; set; }
         
-        /// <summary>
-        /// Navigation property to the product in this cart item
-        /// Virtual property for Entity Framework lazy loading
-        /// Many-to-one relationship: many cart items can reference one product
-        /// </summary>
+        
+        // Navigation property to the product in this cart item
+        // Virtual property for Entity Framework lazy loading
+        // Many-to-one relationship: many cart items can reference one product
+        
         public virtual Product Product { get; set; } = null!;
         
         // Quantity of the product in the cart

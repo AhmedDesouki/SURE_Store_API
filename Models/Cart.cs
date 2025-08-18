@@ -8,7 +8,7 @@ namespace SURE_Store_API.Models
  
     public class Cart
     {
-       
+        [Key]
         public int Id { get; set; }
         
         

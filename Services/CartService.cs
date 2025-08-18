@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using SURE_Store_API.Data;
+using SURE_Store_API.DTOs;
 using SURE_Store_API.Models;
 using System;
 using System.Linq;
@@ -8,6 +9,14 @@ using System.Threading.Tasks;
 
 namespace SURE_Store_API.Services
 {
+    public interface ICartService
+    {
+        Task<CartResponse> GetCartAsync(string userId);
+        Task<CartResponse> AddToCartAsync(string userId, AddToCartRequest request);
+        Task<CartResponse> UpdateCartItemAsync(string userId, int itemId, UpdateCartItemRequest request);
+        Task<CartResponse> RemoveFromCartAsync(string userId, int itemId);
+        Task<CartResponse> ClearCartAsync(string userId);
+    }
     public class CartService : ICartService
     {
         private readonly ApplicationDbContext _context;
@@ -16,131 +25,185 @@ namespace SURE_Store_API.Services
         {
             _context = context;
         }
-
-        // عرض السلة الحالية للمستخدم
-        public async Task<Cart?> GetCart(string userId)
+        public async Task<CartResponse> GetCartAsync(string userId)
         {
-            return await _context.Carts
+            var cart = await _context.Carts
                 .Include(c => c.CartItems)
-                    .ThenInclude(ci => ci.Product)
+                .ThenInclude(ci => ci.Product)
+                .ThenInclude(p => p.Category)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
-        }
 
-        // إضافة منتج للسلة
-        public async Task<Cart> AddToCart(string userId, int productId, int quantity)
-        {
-            if (quantity <= 0)
-                throw new Exception("الكمية يجب أن تكون أكبر من صفر.");
-
-            // حاولنا نجيب السلة أولًا (تحتوي CartItems + Product)
-            var cart = await GetCart(userId);
-
-            // لو مفيش سلة، نُنشئ واحدة جديدة
             if (cart == null)
             {
                 cart = new Cart { UserId = userId };
                 _context.Carts.Add(cart);
-                // لا نحتاج SaveChanges هنا فوراً، لكن نعمل save بعد إضافة العنصر لضمان وجود الـ Cart.Id إذا احتجناه
                 await _context.SaveChangesAsync();
-                // نعيد تحميل السلة كاملة مع العناصر (حالياً فارغة)
-                cart = await GetCart(userId) ?? cart;
             }
 
-            var product = await _context.Products.FindAsync(productId);
-            if (product == null)
-                throw new Exception("المنتج غير موجود.");
-            if (quantity > product.StockQuantity)
-                throw new Exception("الكمية المطلوبة أكبر من المخزون.");
+            var cartItems = cart.CartItems.Select(ci => new CartItemDto
+            {
+                Id = ci.Id,
+                ProductId = ci.ProductId,
+                ProductName = ci.Product.Name,
+                ProductImageUrl = ci.Product.ImageUrl,
+                ProductPrice = ci.Product.Price,
+                Quantity = ci.Quantity,
+                TotalPrice = ci.Product.Price * ci.Quantity,
+                AvailableStock = ci.Product.StockQuantity
+            }).ToList();
 
-            // نحاول نلاقي العنصر داخل السلة
-            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+            return new CartResponse
+            {
+                Success = true,
+                CartItems = cartItems,
+                TotalItems = cartItems.Sum(ci => ci.Quantity),
+                TotalAmount = cartItems.Sum(ci => ci.TotalPrice)
+            };
+        }
+
+        public async Task<CartResponse> AddToCartAsync(string userId, AddToCartRequest request)
+        {
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                cart = new Cart { UserId = userId };
+                _context.Carts.Add(cart);
+            }
+
+            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == request.ProductId);
             if (existingItem != null)
             {
-                if (existingItem.Quantity + quantity > product.StockQuantity)
-                    throw new Exception("لا يوجد مخزون كافٍ.");
-                existingItem.Quantity += quantity;
+                existingItem.Quantity += request.Quantity;
             }
             else
             {
-                var newItem = new CartItem
+                var product = await _context.Products.FindAsync(request.ProductId);
+                if (product == null)
                 {
-                    ProductId = productId,
-                    Quantity = quantity,
-                    // لا حاجة لربط Cart يدوياً إذا كانت الـ Cart مُتعقبة (tracked) من _context
-                };
-                cart.CartItems.Add(newItem);
+                    return new CartResponse
+                    {
+                        Success = false,
+                        Message = "Product not found"
+                    };
+                }
+
+                if (product.StockQuantity < request.Quantity)
+                {
+                    return new CartResponse
+                    {
+                        Success = false,
+                        Message = "Insufficient stock"
+                    };
+                }
+
+                cart.CartItems.Add(new CartItem
+                {
+                    ProductId = request.ProductId,
+                    Quantity = request.Quantity
+                });
             }
 
             await _context.SaveChangesAsync();
 
-            // نعيد السلة المحدثة مع بيانات المنتجات
-            return await GetCart(userId) ?? cart;
+            return await GetCartAsync(userId);
         }
 
-        // تعديل كمية منتج موجود في السلة
-        public async Task<Cart> UpdateQuantity(string userId, int cartItemId, int quantity)
+        public async Task<CartResponse> UpdateCartItemAsync(string userId, int itemId, UpdateCartItemRequest request)
         {
-            if (quantity <= 0)
-                throw new Exception("الكمية يجب أن تكون أكبر من صفر.");
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            var cart = await GetCart(userId);
             if (cart == null)
-                throw new Exception("السلة غير موجودة.");
+            {
+                return new CartResponse
+                {
+                    Success = false,
+                    Message = "Cart not found"
+                };
+            }
 
-            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == itemId);
             if (cartItem == null)
-                throw new Exception("العنصر غير موجود في السلة.");
+            {
+                return new CartResponse
+                {
+                    Success = false,
+                    Message = "Cart item not found"
+                };
+            }
 
-            // product موجود لأن GetCart شمل ThenInclude(ci => ci.Product)
-            if (quantity > (cartItem.Product?.StockQuantity ?? 0))
-                throw new Exception("الكمية المطلوبة أكبر من المخزون.");
+            if (cartItem.Product.StockQuantity < request.Quantity)
+            {
+                return new CartResponse
+                {
+                    Success = false,
+                    Message = "Insufficient stock"
+                };
+            }
 
-            cartItem.Quantity = quantity;
+            cartItem.Quantity = request.Quantity;
             await _context.SaveChangesAsync();
 
-            return await GetCart(userId) ?? cart;
+            return await GetCartAsync(userId);
         }
 
-        // حذف منتج من السلة
-        public async Task<Cart> RemoveFromCart(string userId, int cartItemId)
+        public async Task<CartResponse> RemoveFromCartAsync(string userId, int itemId)
         {
-            var cart = await GetCart(userId);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
             if (cart == null)
-                throw new Exception("السلة غير موجودة.");
+            {
+                return new CartResponse
+                {
+                    Success = false,
+                    Message = "Cart not found"
+                };
+            }
 
-            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == itemId);
             if (cartItem == null)
-                throw new Exception("العنصر غير موجود في السلة.");
+            {
+                return new CartResponse
+                {
+                    Success = false,
+                    Message = "Cart item not found"
+                };
+            }
 
-            _context.CartItems.Remove(cartItem);
+            cart.CartItems.Remove(cartItem);
             await _context.SaveChangesAsync();
 
-            return await GetCart(userId) ?? cart;
+            return await GetCartAsync(userId);
         }
 
-        internal async Task<int?> GetCart(int v)
+        public async Task<CartResponse> ClearCartAsync(string userId)
         {
-            throw new NotImplementedException();
-        }
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-        Task<Cart> ICartService.GetCart(int userId)
-        {
-            throw new NotImplementedException();
-        }
+            if (cart != null)
+            {
+                cart.CartItems.Clear();
+                await _context.SaveChangesAsync();
+            }
 
-        public Task<Cart> AddToCart(int userId, int productId, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cart> UpdateQuantity(int userId, int cartItemId, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cart> RemoveFromCart(int userId, int cartItemId)
-        {
-            throw new NotImplementedException();
+            return new CartResponse
+            {
+                Success = true,
+                Message = "Cart cleared successfully",
+                CartItems = new List<CartItemDto>(),
+                TotalItems = 0,
+                TotalAmount = 0
+            };
         }
     }
-}
+
+        }
