@@ -10,7 +10,8 @@ namespace SURE_Store_API.Data
             : base(options) // Pass options to base DbContext constructor
         {
         }
-
+        public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
 

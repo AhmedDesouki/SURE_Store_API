@@ -5,19 +5,19 @@ namespace SURE_Store_API.Interfaces
 {
     public interface ICartRepository
     {
-        // جلب السلة للمستخدم
-        Task<Cart> GetCart(int userId);
+        // Get cart for user
+        Task<Cart> GetCartAsync(string userId);
 
-        // إضافة منتج للسلة
-        Task<Cart> AddToCart(int userId, int productId, int quantity);
+        // Add product to cart
+        Task AddToCartAsync(string userId, int productId, int quantity, decimal price);
 
-        // تحديث الكمية لمنتج في السلة
-        Task<Cart> UpdateCartItem(int userId, int productId, int quantity);
+        // Update quantity for product in cart
+        Task UpdateQuantityAsync(string userId, int cartItemId, int quantity);
 
-        // حذف منتج من السلة
-        Task<Cart> RemoveFromCart(int userId, int productId);
+        // Remove product from cart
+        Task RemoveFromCartAsync(string userId, int cartItemId);
 
-        // إفراغ السلة بالكامل
-        Task<bool> ClearCart(int userId);
+        // Clear entire cart
+        Task ClearCartAsync(string userId);
     }
 }
