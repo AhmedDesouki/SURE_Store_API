@@ -1,25 +1,17 @@
-﻿using SURE_Store_API.Models;
+﻿using SURE_Store_API.DTOs;
+using SURE_Store_API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SURE_Store_API.Services
+namespace SURE_Store_API.Interfaces
 {
-    public interface ICartServices
+    public interface ICartService
     {
-        // تجيب السلة الخاصة بالمستخدم
-        Task<Cart> GetCart(int userId);
-
-        // إضافة منتج للسلة
-        Task<Cart> AddToCart(int userId, int productId, int quantity);
-
-        // تحديث الكمية لمنتج في السلة
-        Task<Cart> UpdateCartItem(int userId, int productId, int quantity);
-
-        // حذف منتج من السلة
-        Task<Cart> RemoveFromCart(int userId, int productId);
-
-        // إفراغ السلة بالكامل
-        Task<bool> ClearCart(int userId);
+        Task<CartDto> GetUserCartAsync(string userId);
+        Task<CartDto> AddToCartAsync(string userId, int productId, int quantity);
+        Task<CartDto> UpdateCartItemAsync(string userId, int cartItemId, int quantity);
+        Task<CartDto> RemoveFromCartAsync(string userId, int cartItemId);
+        Task<CartDto> ClearCartAsync(string userId);
     }
 }
 

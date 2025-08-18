@@ -4,80 +4,95 @@ using SURE_Store_API.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
+using SURE_Store_API.DTOs;
 
 namespace SURE_Store_API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
+    
+    [ApiController]  // Indicates this is an API controller
+    [Route("api/[controller]")]  // Route template: api/cart
+    [Authorize]  // Require authentication for all cart operations
     public class CartController : ControllerBase
     {
-        private readonly CartService _cartService;
-
-        public CartController(CartService cartService)
+        private readonly ICartService _cartService;
+        public CartController(ICartService cartService)
         {
-            _cartService = cartService;
+            _cartService = cartService;  // Store cart service reference
         }
-
-        private string GetUserId()
+        [HttpGet]  // HTTP GET endpoint
+        public async Task<ActionResult<CartResponse>> GetCart()
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                throw new Exception("User ID not found in token.");
-            return userIdClaim.Value;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetCart()
-        {
-            var cart = await _cartService.GetCart(GetUserId());
-            var total = cart?.CartItems.Sum(item => item.Quantity * item.Product.Price) ?? 0;
-
-            return Ok(new
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
             {
-                Items = cart?.CartItems.Select(item => new
-                {
-                    item.Id,
-                    item.ProductId,
-                    ProductName = item.Product.Name,
-                    item.Quantity,
-                    item.Product.Price,
-                    SubTotal = item.Quantity * item.Product.Price
-                }),
-                Total = total
-            });
+                return Unauthorized();
+            }
+
+            var response = await _cartService.GetCartAsync(userId);
+            return Ok(response);
+        }
+        [HttpPost]  // HTTP POST endpoint
+        public async Task<ActionResult<CartResponse>> AddToCart(AddToCartRequest request)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var response = await _cartService.AddToCartAsync(userId, request);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+        [HttpPut("{itemId}")]  // HTTP PUT endpoint with item ID parameter
+        public async Task<ActionResult<CartResponse>> UpdateCartItem(int itemId, UpdateCartItemRequest request)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var response = await _cartService.UpdateCartItemAsync(userId, itemId, request);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+        [HttpDelete("{itemId}")]  // HTTP DELETE endpoint with item ID parameter
+        public async Task<ActionResult<CartResponse>> RemoveFromCart(int itemId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var response = await _cartService.RemoveFromCartAsync(userId, itemId);
+
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+        [HttpDelete]  // HTTP DELETE endpoint
+        public async Task<ActionResult<CartResponse>> ClearCart()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var response = await _cartService.ClearCartAsync(userId);
+            return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddToCart([FromBody] CartRequest request)
-        {
-            await _cartService.AddToCart(GetUserId(), request.ProductId, request.Quantity);
-            return Ok(new { Message = "Product added to cart successfully" });
-        }
 
-        [HttpPut("{itemId}")]
-        public async Task<IActionResult> UpdateQuantity(int itemId, [FromBody] UpdateCartQuantityRequest request)
-        {
-            await _cartService.UpdateQuantity(GetUserId(), itemId, request.Quantity);
-            return Ok(new { Message = "Cart item updated successfully" });
-        }
-
-        [HttpDelete("{itemId}")]
-        public async Task<IActionResult> RemoveItem(int itemId)
-        {
-            await _cartService.RemoveFromCart(GetUserId(), itemId);
-            return Ok(new { Message = "Cart item removed successfully" });
-        }
     }
 
-    public class CartRequest
-    {
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-    }
-
-    public class UpdateCartQuantityRequest
-    {
-        public int Quantity { get; set; }
-    }
 }
