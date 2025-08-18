@@ -85,29 +85,6 @@ namespace SURE_Store_API.Repositories
             }
         }
 
-        public Task<Cart> GetCart(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cart> AddToCart(int userId, int productId, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cart> UpdateCartItem(int userId, int productId, int quantity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cart> RemoveFromCart(int userId, int productId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ClearCart(int userId)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

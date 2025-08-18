@@ -33,7 +33,7 @@ namespace SURE_Store_API
             // Register services
             builder.Services.AddScoped<SURE_Store_API.Services.ICategoryService, CategoryService>();
             builder.Services.AddScoped<SURE_Store_API.Services.IProductService, ProductService>();
-            builder.Services.AddScoped<SURE_Store_API.Services.IOrderService, OrderService>();
+            builder.Services.AddScoped<SURE_Store_API.Services.IOrderService,OrderService>();
             builder.Services.AddScoped<SURE_Store_API.Services.ICartService, CartService>();
             builder.Services.AddScoped<SURE_Store_API.Services.IAuthService, AuthService>();
 

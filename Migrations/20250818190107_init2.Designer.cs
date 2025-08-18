@@ -12,8 +12,8 @@ using SURE_Store_API.Data;
 namespace SURE_Store_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250818205135_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20250818190107_init2")]
+    partial class init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
