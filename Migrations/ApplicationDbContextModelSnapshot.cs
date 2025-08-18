@@ -417,7 +417,7 @@ namespace SURE_Store_API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("SURE_Store_API.Models.Product", b =>
