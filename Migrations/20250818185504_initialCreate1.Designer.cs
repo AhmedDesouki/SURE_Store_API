@@ -12,8 +12,8 @@ using SURE_Store_API.Data;
 namespace SURE_Store_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250816155459_changeimgurls")]
-    partial class changeimgurls
+    [Migration("20250818185504_initialCreate1")]
+    partial class initialCreate1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -357,6 +357,21 @@ namespace SURE_Store_API.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ShippingCity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ShippingCountry")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ShippingPostalCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -375,7 +390,7 @@ namespace SURE_Store_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("SURE_Store_API.Models.OrderItem", b =>
@@ -405,7 +420,7 @@ namespace SURE_Store_API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("SURE_Store_API.Models.Product", b =>

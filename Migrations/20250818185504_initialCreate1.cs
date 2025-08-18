@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SURE_Store_API.Migrations
 {
     /// <inheritdoc />
-    public partial class bdserver : Migration
+    public partial class initialCreate1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -197,7 +197,7 @@ namespace SURE_Store_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -208,14 +208,17 @@ namespace SURE_Store_API.Migrations
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShippingAddress = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ShippingCity = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ShippingPostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ShippingCountry = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_AspNetUsers_UserId",
+                        name: "FK_Orders_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -275,7 +278,7 @@ namespace SURE_Store_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItem",
+                name: "OrderItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -287,15 +290,15 @@ namespace SURE_Store_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItem", x => x.Id);
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Order_OrderId",
+                        name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Products_ProductId",
+                        name: "FK_OrderItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -318,15 +321,15 @@ namespace SURE_Store_API.Migrations
                 values: new object[,]
                 {
                     { 1, 1, "Latest Apple smartphone", "https://images.unsplash.com/photo-1697284959152-32ef13855932?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "iPhone 15", 999.99m, 50 },
-                    { 2, 1, "Latest Samsung smartphone", "assets/2.jpg", "Samsung Galaxy S23", 899.99m, 30 },
-                    { 3, 1, "Noise-cancelling headphones", "assets/3.jpg", "Sony WH-1000XM5", 349.99m, 100 },
-                    { 4, 2, "Comfortable running shoes", "assets/4.jpg", "Nike Air Max", 129.99m, 200 },
-                    { 5, 2, "High-performance running shoes", "assets/5.jpg", "Adidas Ultraboost", 159.99m, 150 },
-                    { 6, 2, "Classic denim jeans", "assets/6.jpg", "Levi's Jeans", 59.99m, 300 },
-                    { 7, 3, "Classic novel by F. Scott Fitzgerald", "assets/7.jpg", "The Great Gatsby", 10.99m, 500 },
-                    { 8, 3, "Dystopian novel about totalitarianism", "assets/8.jpg", "1984 by George Orwell", 12.99m, 400 },
-                    { 9, 3, "Classic novel by Harper Lee", "assets/9.jpg", "To Kill a Mockingbird", 14.99m, 350 },
-                    { 10, 3, "Novel by J.D. Salinger", "assets/10.jpg", "The Catcher in the Rye", 11.99m, 450 }
+                    { 2, 1, "Latest Samsung smartphone", "https://m.media-amazon.com/images/I/51ngAkKqflL._AC_UY327_FMwebp_QL65_.jpg", "Samsung Galaxy S23", 899.99m, 30 },
+                    { 3, 1, "Noise-cancelling headphones", "https://m.media-amazon.com/images/I/51hrEIBMDzL._AC_SL1320_.jpg", "Sony WH-1000XM5", 349.99m, 100 },
+                    { 4, 2, "Comfortable running shoes", "https://m.media-amazon.com/images/I/61gG+NEOhmL._AC_SX575_.jpg", "Nike Air Max", 129.99m, 200 },
+                    { 5, 2, "High-performance running shoes", "https://m.media-amazon.com/images/I/71Kks1RxWhL._AC_SY695_.jpg", "Adidas Ultraboost", 159.99m, 150 },
+                    { 6, 2, "Classic denim jeans", "https://m.media-amazon.com/images/I/51vL9b0iG5L._AC_SX679_.jpg", "Levi's Jeans", 59.99m, 300 },
+                    { 7, 3, "Classic novel by F. Scott Fitzgerald", "https://m.media-amazon.com/images/I/61uYYec8joL._SL1500_.jpg", "The Great Gatsby", 10.99m, 500 },
+                    { 8, 3, "Dystopian novel about totalitarianism", "https://m.media-amazon.com/images/I/71wANojhEKL._SL1500_.jpg", "1984 by George Orwell", 12.99m, 400 },
+                    { 9, 3, "Classic novel by Harper Lee", "https://m.media-amazon.com/images/I/81aY1lxk+9L._SL1500_.jpg", "To Kill a Mockingbird", 14.99m, 350 },
+                    { 10, 3, "Novel by J.D. Salinger", "https://m.media-amazon.com/images/I/81TRBjfC5fL._SL1500_.jpg", "The Catcher in the Rye", 11.99m, 450 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -385,19 +388,19 @@ namespace SURE_Store_API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_UserId",
-                table: "Order",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_OrderId",
-                table: "OrderItem",
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_ProductId",
-                table: "OrderItem",
+                name: "IX_OrderItems_ProductId",
+                table: "OrderItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId",
+                table: "Orders",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -427,7 +430,7 @@ namespace SURE_Store_API.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
-                name: "OrderItem");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -436,7 +439,7 @@ namespace SURE_Store_API.Migrations
                 name: "Carts");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
